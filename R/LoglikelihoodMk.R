@@ -8,24 +8,24 @@ LoglikelihoodMk = function(seq, E, mu, Ptrans, k){
 
   ## length of the state space
   S = length(E)
-  if(dim(Ptrans)[1] != S || dim(Ptrans)[2] != S){
+  if(dim(Ptrans)[1] != S ^ k || dim(Ptrans)[2] != S){
     stop("The size of the matrix Ptrans must be equal to SxS with S = length(E)")  
   }
 
   if( !is.matrix(Ptrans) ){
     stop("The parameter \"Ptrans\" must be a matrix")
   }
-  
+
   ifelse(rowSums(Ptrans) == 1, "", stop("The matrix \"Ptrans\" must be stochastic"))
-  
+
   if ( sum(mu) != 1 ){
     stop("The vector \"init\" must be equal to 1")
   }
-  
+
   if(!is.list(seq)){
     stop("The parameter \"seq\" should be a list")
   }
-  
+
   vect.seq<-NULL
   ## Get the number of sequences
   nbSeq<-length(seq)
@@ -46,7 +46,7 @@ LoglikelihoodMk = function(seq, E, mu, Ptrans, k){
     ## Get the first state
     SeqP1 = c(SeqP1, vect.seq[1])
   }
-  
+
   lV = list()
   for (j in 1:nbSeq){
     s <- 0
@@ -57,8 +57,8 @@ LoglikelihoodMk = function(seq, E, mu, Ptrans, k){
     Ptrans.vect = Ptrans[which(Ptrans != 0)]
     lV[[j]] <- s + sum(LNij.vect*log(Ptrans.vect))
   }
-  
+
   # s<-as.numeric(s)     
-  
+
   return (list(L = lV))
 }
